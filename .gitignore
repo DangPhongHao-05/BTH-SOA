@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+.vs/
+
+# Visual Studio
+*.user
+*.suo
+
+# React / Node
+node_modules/
+dist/
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Windows
+Thumbs.db
