@@ -18,7 +18,12 @@ export interface RegisterCredentials {
 }
 
 export interface AuthResponse {
-    token: string;
+    accessToken: string;
     refreshToken?: string;
     user: User;
+}
+
+export interface RegisterResponse {
+  message: string;
+  username: string;
 }

@@ -21,7 +21,7 @@ namespace Auth.Services.Implements
             _configuration = configuration;
         }
 
-        public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
+        public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
         {
             if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 throw new Exception("Username đã tồn tại.");
@@ -38,7 +38,11 @@ namespace Auth.Services.Implements
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return await GenerateAuthResponseAsync(user);
+            return new RegisterResponse
+            {
+                Message = $"Đã tạo thành công định danh [{user.Username}] trong hệ thống.",
+                Username = user.Username
+            };
         }
 
         public async Task<AuthResponse> LoginAsync(LoginRequest request)

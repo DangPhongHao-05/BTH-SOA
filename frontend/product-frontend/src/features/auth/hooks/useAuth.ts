@@ -8,10 +8,18 @@ export const useAuth = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Lấy thông tin user hiện tại từ localStorage nếu có
   const [user, setUser] = useState<User | null>(() => {
     const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
+
+    if (savedUser && savedUser !== "undefined") {
+      try {
+        return JSON.parse(savedUser);
+      } catch (err) {
+        console.error("Lỗi đọc user từ localStorage:", err);
+        return null;
+      }
+    }
+    return null;
   });
 
   const login = async (credentials: LoginCredentials) => {
@@ -19,12 +27,17 @@ export const useAuth = () => {
     setError(null);
     try {
       const data = await authApi.login(credentials);
-      localStorage.setItem("token", data.token);
+
+      localStorage.setItem("token", data.accessToken);
       if (data.refreshToken) {
         localStorage.setItem("refreshToken", data.refreshToken);
       }
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
+
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setUser(data.user);
+      }
+
       navigate("/");
     } catch (err: any) {
       setError(
@@ -36,23 +49,21 @@ export const useAuth = () => {
     }
   };
 
-  const register = async (credentials: RegisterCredentials) => {
+  const register = async (
+    credentials: RegisterCredentials,
+  ): Promise<string | null> => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await authApi.register(credentials);
-      localStorage.setItem("token", data.token);
-      if (data.refreshToken) {
-        localStorage.setItem("refreshToken", data.refreshToken);
-      }
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
-      navigate("/");
+      // Gọi API đăng ký
+      const responseData = await authApi.register(credentials);
+      return responseData.message;
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Đăng ký thất bại. Tên tài khoản có thể đã tồn tại.",
+          "Đăng ký thất bại. Định danh có thể đã tồn tại.",
       );
+      return null;
     } finally {
       setIsLoading(false);
     }

@@ -20,24 +20,21 @@ export default function RegisterForm({
     password: "",
     confirmPassword: "",
     email: "",
-    fullName: "",
+    // Đã xóa fullName
   });
 
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setValidationError(null); // Xóa lỗi validation khi người dùng gõ lại
+    setValidationError(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Kiểm tra mật khẩu khớp nhau không
     if (form.password !== form.confirmPassword) {
-      setValidationError(
-        "Mật khẩu xác nhận không khớp. Vui lòng kiểm tra lại!",
-      );
+      setValidationError("Mã khóa xác nhận không khớp. Yêu cầu kiểm tra lại.");
       return;
     }
 
@@ -45,26 +42,24 @@ export default function RegisterForm({
       username: form.username,
       password: form.password,
       email: form.email,
-      fullName: form.fullName,
     };
 
     onSubmit(registerData);
   };
 
-  // Gộp lỗi từ server (error) và lỗi do kiểm tra mật khẩu (validationError)
   const displayError = validationError || error;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {displayError && (
-        <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg border border-red-100 text-center">
-          {displayError}
+        <div className="border border-red-500 bg-red-50 text-red-700 text-[11px] font-bold px-3 py-2 uppercase tracking-wider">
+          [CẢNH BÁO] {displayError}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          Tên đăng nhập *
+        <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+          Định danh (Username) *
         </label>
         <input
           type="text"
@@ -72,28 +67,28 @@ export default function RegisterForm({
           value={form.username}
           onChange={handleChange}
           required
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-slate-800"
+          className="w-full px-3 py-2 border border-gray-300 bg-white text-xs font-mono focus:border-gray-900 focus:outline-none transition-colors"
           placeholder="Chọn username..."
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          Họ và tên
+      {/* <div>
+        <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+          Địa chỉ Email
         </label>
         <input
-          type="text"
-          name="fullName"
-          value={form.fullName}
+          type="email"
+          name="email"
+          value={form.email}
           onChange={handleChange}
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-slate-800"
-          placeholder="Nguyễn Văn A..."
+          className="w-full px-3 py-2 border border-gray-300 bg-white text-xs font-mono focus:border-gray-900 focus:outline-none transition-colors"
+          placeholder="example@soa.system..."
         />
-      </div>
+      </div> */}
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          Mật khẩu *
+        <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+          Mã khóa (Password) *
         </label>
         <input
           type="password"
@@ -101,14 +96,14 @@ export default function RegisterForm({
           value={form.password}
           onChange={handleChange}
           required
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-slate-800"
+          className="w-full px-3 py-2 border border-gray-300 bg-white text-xs font-mono focus:border-gray-900 focus:outline-none transition-colors"
           placeholder="••••••••"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          Xác nhận mật khẩu *
+        <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+          Xác nhận mã khóa *
         </label>
         <input
           type="password"
@@ -116,7 +111,7 @@ export default function RegisterForm({
           value={form.confirmPassword}
           onChange={handleChange}
           required
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-slate-800"
+          className="w-full px-3 py-2 border border-gray-300 bg-white text-xs font-mono focus:border-gray-900 focus:outline-none transition-colors"
           placeholder="••••••••"
         />
       </div>
@@ -124,20 +119,20 @@ export default function RegisterForm({
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm disabled:bg-blue-300 mt-2"
+        className="w-full py-2 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold uppercase transition-colors disabled:bg-gray-400 border border-gray-900 cursor-pointer mt-4"
       >
-        {isLoading ? "Đang tạo tài khoản..." : "Đăng ký"}
+        {isLoading ? "[ĐANG TẠO HỒ SƠ...]" : "[GHI NHẬN TÀI KHOẢN]"}
       </button>
 
-      <p className="text-center text-sm text-slate-500 mt-4">
-        Đã có tài khoản?{" "}
+      <div className="text-center text-[11px] text-gray-500 mt-4 border-t border-gray-200 pt-4 uppercase">
+        Đã có hồ sơ hệ thống?{" "}
         <Link
           to="/auth/login"
-          className="text-blue-600 font-medium hover:underline"
+          className="text-gray-900 font-bold hover:bg-gray-100 px-1 border border-transparent hover:border-gray-300 transition-colors"
         >
-          Đăng nhập
+          [ĐĂNG NHẬP]
         </Link>
-      </p>
+      </div>
     </form>
   );
 }

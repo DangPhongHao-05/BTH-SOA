@@ -3,6 +3,7 @@ import type {
   LoginCredentials,
   RegisterCredentials,
   AuthResponse,
+  RegisterResponse,
 } from "../types";
 
 export const authApi = {
@@ -13,7 +14,7 @@ export const authApi = {
     });
   },
 
-  register: async (data: RegisterCredentials): Promise<AuthResponse> => {
+  register: async (data: RegisterCredentials): Promise<RegisterResponse> => {
     return apiClient.post("/auth/register", data, {
       baseURL: SERVICES.AUTH,
     });
